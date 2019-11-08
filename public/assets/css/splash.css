@@ -1,19 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Pacifico|Raleway:200,300");
-:root {
-	--size: 35px;
-	--theme_back: #222;
-}
-body,
-html,
-.innerBody {
-	overflow: hidden !important;
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	background-color: var(--theme_back);
-}
- 
+
 .splash {
 	position: absolute;
 	z-index: 11;
@@ -147,3 +132,4 @@ html,
 		transform: rotate(360deg);
 	}
 }
+
