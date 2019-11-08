@@ -1,11 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Pacifico|Raleway:200,300");
 :root {
-	--nav_height: 45px;
-	--nav_color: #3c3c3c;
-	--splash_color: #222222;
-	--sidebar_color: #2d2d2d;
-	--sidebar_white_color: #eee;
-	--new_tab_color: #2d2d2d;
+	--size: 35px;
+	--theme_back: #222;
 }
 body,
 html,
@@ -15,7 +11,7 @@ html,
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	background-color: var(--sidebar_color);
+	background-color: var(--theme_back);
 }
  
 .splash {
@@ -27,8 +23,8 @@ html,
 }
 
 .splashlogo {
-	width: calc(var(--nav_height) * 1.3);
-	height: calc(var(--nav_height) * 1.3);
+	width: calc(var(--size) * 1.3);
+	height: calc(var(--size) * 1.3);
 	margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
@@ -59,9 +55,9 @@ html,
 }
 
 #loading-content {
-	width: 170px;
-	height: 170px;
-	border: 3px solid #f00;
+	width: 130px;
+	height: 130px;
+	border: 3px solid transparent;
 	margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
@@ -76,7 +72,7 @@ html,
 #loading-content:after {
 	content: "";
 	position: absolute;
-	border: 3px solid #0f0;
+	border: 3px solid transparent;
 	left: 15px;
 	right: 15px;
 	top: 15px;
@@ -86,7 +82,7 @@ html,
 #loading-content:before {
 	content: "";
 	position: absolute;
-	border: 3px solid #00f;
+	border: 3px solid transparent;
 	left: 5px;
 	right: 5px;
 	top: 5px;
@@ -94,9 +90,9 @@ html,
 }
 
 #loading-content {
-	border: 3px solid transparent;
+	border: 1.5px solid transparent;
 	border-top-color: transparent;
-	border-bottom-color: #transparent;
+	border-bottom-color: transparent;
 	border-radius: 50%;
 	-webkit-animation: loader 2s linear infinite;
 	-moz-animation: loader 2s linear infinite;
@@ -105,9 +101,9 @@ html,
 }
 
 #loading-content:before {
-	border: 3px solid transparent;
-	border-top-color: #4d658d;
-	border-bottom-color: #4d658d;
+	border: 1.5px solid transparent;
+	border-top-color: #80D8FF;
+	border-bottom-color: #80D8FF;
 	border-radius: 50%;
 	-webkit-animation: loader 3s linear infinite;
 	-moz-animation: loader 2s linear infinite;
@@ -116,9 +112,9 @@ html,
 }
 
 #loading-content:after {
-	border: 3px solid transparent;
-	border-top-color: #84417c;
-	border-bottom-color: #84417c;
+	border: 1.5px solid transparent;
+	border-top-color: #EA80FC;
+	border-bottom-color: #EA80FC;
 	border-radius: 50%;
 	-webkit-animation: loader 1.5s linear infinite;
 	animation: loader 1.5s linear infinite;
