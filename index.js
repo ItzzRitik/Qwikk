@@ -3,6 +3,7 @@ const app = express();
 const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
 const ip = require("ip");
+require('dotenv').config();
 
 app.set("view engine", "ejs");
 app.use('/public', express.static('public'));
@@ -23,8 +24,7 @@ let loader = function(msg) {
         }, 50);
     };
 
-const dbOptions = { useNewUrlParser: true,useFindAndModify: false, reconnectTries: Number.MAX_VALUE, poolSize: 10 };
-console.log(process.env.MONGO_KEY);
+const dbOptions = { useNewUrlParser: true,useFindAndModify: false, reconnectTries: Number.MAX_VALUE, useUnifiedTopology: true, poolSize: 10 };
 var mongoConnect = function(callback) {
     mongoose.connect(process.env.MONGO_KEY, dbOptions).then(
         () => { 
@@ -44,10 +44,12 @@ var mongoConnect = function(callback) {
 };
 mongoConnect();
 
+app.get("/*", function(req, res) {
+    res.render("index");
+});
 
 app.listen(process.env.PORT || 8080, function() {
-    clear();
-    console.log("\n" + ++call + ") Starting Server");
+    console.log("\n" + ++call + ") Starting Qwikk Server");
     console.log(">  Server is running at http://" + (process.env.IP || ip.address() || "localhost") + ":" + (process.env.PORT || "8080"));
     console.log("\n" + ++call + ") Connection to MongoDB Atlas Server");
     load = loader(" ".repeat(34));
