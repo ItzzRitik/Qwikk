@@ -4,6 +4,7 @@
 	z-index: 11;
 	width: 100%;
 	height: 100%;
+	background-color: var(--themeBack);
 	transition: all 1s cubic-bezier(0.02, 0.01, 0.21, 1);
 }
 
