@@ -61,9 +61,9 @@ var mongoConnect = function(callback) {
 mongoConnect();
 
 app.post("/qwikk", function(req, res){
-    let url = req.body.url,
-        tag = "", 
-        qwikkUrl = "";
+    let url = req.body.url;
+    url = ((url.indexOf('://')  && url.indexOf('mailto:') === -1)?'http://':'')+url
+    let tag = "", qwikkUrl = "";
     Qwikks.find({ userID: "", url: url }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
@@ -125,7 +125,7 @@ app.get("/*", function(req, res) {
     Qwikks.find({ tag: tag }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
-            if (token.length) res.redirect(((token[0].url.indexOf('://')  && link.indexOf('mailto:') === -1)? 'http://':'')+token[0].url);
+            if (token.length) res.redirect(token[0].url);
             else{
                 res.send('<h1 style="text-align:center">404 Not Found</h1>');
             }
