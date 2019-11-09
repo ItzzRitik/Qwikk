@@ -2,8 +2,10 @@ const express = require('express');
 const app = express();
 const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
+const ObjectId = require('mongodb').ObjectID;
 const ran = require("randomstring");
 const ip = require("ip");
+const os = require("os");
 require('dotenv').config();
 
 app.set("view engine", "ejs");
@@ -25,17 +27,18 @@ let loader = function(msg) {
     }, 50);
 };
 
-var qwikks = new mongoose.Schema({
+var Qwikks = mongoose.model("qwikks", new mongoose.Schema({
     userID: ObjectId,
     tag: String,
-    url: String,
-});
-var users = new mongoose.Schema({
+    url: String
+}));
+
+var Users = mongoose.model("users", new mongoose.Schema({
     email: String,
     pass: String,
     fname: String,
-    lname: String,
-});
+    lname: String
+}));
 
 const dbOptions = { useNewUrlParser: true, useFindAndModify: false, reconnectTries: Number.MAX_VALUE, useUnifiedTopology: true, poolSize: 10 };
 var mongoConnect = function(callback) {
@@ -58,12 +61,66 @@ var mongoConnect = function(callback) {
 mongoConnect();
 
 app.post("/qwikk", function(req, res){
-    let url = req.body.url;
-    res.send("Done");
-    console.log(url);
+    let url = req.body.url,
+        tag = "", 
+        qwikkUrl = "";
+    Qwikks.find({ url: url }, function(e, token) {
+        if (e) { console.log(">  Error occured :\n>  " + e); }
+        else {
+            if (token.length){
+                qwikkUrl = req.headers.host+"/"+token[0].tag;
+                res.send(qwikkUrl);
+                console.log(qwikkUrl);
+            }
+            else{
+                var unique = (tag) => {
+                    try {
+                        Qwikks.find({ tag: tag }, function(e, token) {
+                            if (e) { console.log(">  Error occured :\n>  " + e); }
+                            else {
+                                if (token.length) return true;
+                                else return false;
+                            }
+                        });
+                    }
+                    catch (err) {
+                        console.log(err);
+                        return false;
+                    }
+                };
+                do {
+                    tag = ran.generate({
+                        length: 5,
+                        capitalization: 'lowercase',
+                        charset: 'alphanumeric'
+                    });
+                } while (unique(tag));
+                Qwikks.create({
+                    userID: null,
+                    tag : tag,
+                    url : url
+                }, function(e, user) {
+                    if (e) {
+                        res.send("0");
+                        console.log("\r>  Error While Creating New Qwikk\n>  " + e);
+                    }
+                    else{
+                        console.log("\r>  Qwikk Sucessfully Created");
+                        qwikkUrl = req.headers.host+"/"+tag;
+                        res.send(qwikkUrl);
+                        console.log('  >  '+qwikkUrl);
+                    } 
+                });
+            }
+        }
+    });
 });
 
 app.get("/", function(req, res) {
+    res.render("index");
+});
+
+app.get("/*", function(req, res) {
     res.render("index");
 });
 

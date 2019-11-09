@@ -23,10 +23,8 @@ $('.qwikk').on('click', function (e) {
     http.setRequestHeader('Content-type', 'application/json');
     http.onreadystatechange=function(e) {
         if (http.readyState == XMLHttpRequest.DONE){   
-            if (http.responseText == 1) {
-                console.log(http.responseText);
-            }
-            else{console.log(e);}
+            let res = http.responseText;
+            console.log(res)
         } 
     }
     http.send(JSON.stringify({
