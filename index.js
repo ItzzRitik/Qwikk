@@ -62,15 +62,15 @@ mongoConnect();
 
 app.post("/qwikk", function(req, res){
     let url = req.body.url;
-    url = ((url.indexOf('://')  && url.indexOf('mailto:') === -1)?'http://':'')+url
+    url = (((url.indexOf('://') === -1  && url.indexOf('mailto:') === -1)?'http://':'')+url).trim();
+    let compUrl = url.substring(url.indexOf('://')+3,url.length);
     let tag = "", qwikkUrl = "";
     Qwikks.find({ userID: "", url: url }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
-            if (token.length){
+            if (token.length && token[0].url.substring(token[0].url.indexOf('://')+3,token[0].url.length) == compUrl){
                 qwikkUrl = req.headers.host+"/"+token[0].tag;
                 res.send(qwikkUrl);
-                console.log(qwikkUrl);
             }
             else{
                 var unique = (tag) => {

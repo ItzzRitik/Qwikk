@@ -16,20 +16,31 @@ window.onload = function(){
         splash();
     },000);
 }
+function copyToClipboard(text) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val(text).select();
+    document.execCommand("copy");
+    $temp.remove();
+}
 
+$('.url').on('keypress', function (e) {
+    if((e.type == "keypress" && (event.keyCode ? event.keyCode : event.which) == '13')) $('.qwikk').click();
+});
 $('.qwikk').on('click', function (e) {
     const http = new XMLHttpRequest();
-    http.open('POST', '/qwikk');
-    http.setRequestHeader('Content-type', 'application/json');
-    http.onreadystatechange=function(e) {
-        if (http.readyState == XMLHttpRequest.DONE){   
-            let res = http.responseText;
-            console.log(res)
-        } 
-    }
-    http.send(JSON.stringify({
-        url: $('.url').val()
-    }));
+        http.open('POST', '/qwikk');
+        http.setRequestHeader('Content-type', 'application/json');
+        http.onreadystatechange=function(e) {
+            if (http.readyState == XMLHttpRequest.DONE){   
+                let res = http.responseText;
+                copyToClipboard(res);
+                console.log(res)
+            } 
+        }
+        http.send(JSON.stringify({
+            url: $('.url').val()
+        }));
 });
 
         
