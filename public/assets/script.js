@@ -17,4 +17,21 @@ window.onload = function(){
     },000);
 }
 
+$('.qwikk').on('click', function (e) {
+    const http = new XMLHttpRequest();
+    http.open('POST', '/qwikk');
+    http.setRequestHeader('Content-type', 'application/json');
+    http.onreadystatechange=function(e) {
+        if (http.readyState == XMLHttpRequest.DONE){   
+            if (http.responseText == 1) {
+                console.log(http.responseText);
+            }
+            else{console.log(e);}
+        } 
+    }
+    http.send(JSON.stringify({
+        url: $('.url').val()
+    }));
+});
+
         

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyparser = require("body-parser");
 const mongoose = require("mongoose");
+const ran = require("randomstring");
 const ip = require("ip");
 require('dotenv').config();
 
@@ -18,13 +19,25 @@ app.use(function(req, res, next) {
 
 let call = 0, load, mongoCall=0;
 let loader = function(msg) {
-        var x=0,load = ["⠁ ","⠈ "," ⠁"," ⠈"," ⠐"," ⠠"," ⢀"," ⡀","⢀ ","⡀ ","⠄ ","⠂ "];//"⠁⠂⠄⡀⢀⠠⠐⠈";
-        return setInterval(function() {
-            process.stdout.write("\r" + load[x=(++x<load.length)?x:0]+" "+msg);
-        }, 50);
-    };
+    var x=0, load = ["⠁ ","⠈ "," ⠁"," ⠈"," ⠐"," ⠠"," ⢀"," ⡀","⢀ ","⡀ ","⠄ ","⠂ "];//"⠁⠂⠄⡀⢀⠠⠐⠈";
+    return setInterval(function() {
+        process.stdout.write("\r" + load[x=(++x<load.length)?x:0]+" "+msg);
+    }, 50);
+};
 
-const dbOptions = { useNewUrlParser: true,useFindAndModify: false, reconnectTries: Number.MAX_VALUE, useUnifiedTopology: true, poolSize: 10 };
+var qwikks = new mongoose.Schema({
+    userID: ObjectId,
+    tag: String,
+    url: String,
+});
+var users = new mongoose.Schema({
+    email: String,
+    pass: String,
+    fname: String,
+    lname: String,
+});
+
+const dbOptions = { useNewUrlParser: true, useFindAndModify: false, reconnectTries: Number.MAX_VALUE, useUnifiedTopology: true, poolSize: 10 };
 var mongoConnect = function(callback) {
     mongoose.connect(process.env.MONGO_KEY, dbOptions).then(
         () => { 
@@ -40,11 +53,17 @@ var mongoConnect = function(callback) {
         }
     ).catch((error) => {
         assert.isNotOk(error,'Promise error');
-    });;
+    });
 };
 mongoConnect();
 
-app.get("/*", function(req, res) {
+app.post("/qwikk", function(req, res){
+    let url = req.body.url;
+    res.send("Done");
+    console.log(url);
+});
+
+app.get("/", function(req, res) {
     res.render("index");
 });
 
