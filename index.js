@@ -28,7 +28,7 @@ let loader = function(msg) {
 };
 
 var Qwikks = mongoose.model("qwikks", new mongoose.Schema({
-    userID: ObjectId,
+    userID: String,
     tag: String,
     url: String
 }));
@@ -64,7 +64,7 @@ app.post("/qwikk", function(req, res){
     let url = req.body.url,
         tag = "", 
         qwikkUrl = "";
-    Qwikks.find({ url: url }, function(e, token) {
+    Qwikks.find({ userID: "", url: url }, function(e, token) {
         if (e) { console.log(">  Error occured :\n>  " + e); }
         else {
             if (token.length){
@@ -96,7 +96,7 @@ app.post("/qwikk", function(req, res){
                     });
                 } while (unique(tag));
                 Qwikks.create({
-                    userID: null,
+                    userID: "",
                     tag : tag,
                     url : url
                 }, function(e, user) {
@@ -121,7 +121,16 @@ app.get("/", function(req, res) {
 });
 
 app.get("/*", function(req, res) {
-    res.render("index");
+    let tag = (req.originalUrl).substring(1, (req.originalUrl).length);
+    Qwikks.find({ tag: tag }, function(e, token) {
+        if (e) { console.log(">  Error occured :\n>  " + e); }
+        else {
+            if (token.length) res.redirect(((token[0].url.indexOf('://')  && link.indexOf('mailto:') === -1)? 'http://':'')+token[0].url);
+            else{
+                res.send('<h1 style="text-align:center">404 Not Found</h1>');
+            }
+        }
+    });
 });
 
 app.listen(process.env.PORT || 8080, function() {
